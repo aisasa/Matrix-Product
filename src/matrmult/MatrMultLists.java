@@ -22,6 +22,7 @@ public class MatrMultLists {
         long startT = System.currentTimeMillis();
         ab = threadedProduct(a, b); //mtrxTranspose(bT));
         System.out.println("Exec time: " + (System.currentTimeMillis() - startT)/1000. + " secs");
+        // Show some checks
         //System.out.println("a·b excerpt= " + Arrays.toString(ab.get(0)));
         //System.out.println("a·b = " + Arrays.deepToString(ab.toArray()));
     }
@@ -34,11 +35,10 @@ public class MatrMultLists {
         // Get number of rows in each chunk (piece of work) of matrix A
         int rowsInChunksAvrg = a.size()/nProc;
         int remain = a.size()%nProc;           
-        // Product matrix initialization
+        // Product matrix initialization (to zeros)
         ArrayList<double[]> prodMtrx = new ArrayList<>(a.size());
-        double[] zerosArray = new double[b.get(0).length];
         for(int i=0; i<a.size(); i++)
-            prodMtrx.add(zerosArray); 
+            prodMtrx.add(new double[b.get(0).length]);
         // Go threading
         int index = 0;                      // Indexing the A matrix chunks
         for(int i=0; i<nProc; i++){         // For each core or chunk:
@@ -81,10 +81,18 @@ public class MatrMultLists {
     }
     
     private static ArrayList<double[]> transposeProduct(ArrayList<double[]> a, ArrayList<double[]> bT){          
+        /*ArrayList<double[]> dp = new ArrayList<>(a.size());
+        for(int i=0; i<a.size(); i++)
+            dp.add(new double[bT.size()]); 
+        for(int i=0; i<a.size(); i++)
+            for(int j=0; j<bT.size(); j++)
+                for(int k=0; k<a.get(0).length; k++)
+                    dp.get(i)[j] += a.get(i)[k] * bT.get(j)[k];*/
+        
         ArrayList<double[]> dp = new ArrayList<>(a.size());
-        double[] array = new double[bT.size()];
         for(int i=0; i<a.size(); i++){
-            for(int j=0; j<bT.size(); j++){
+            double[] array = new double[bT.size()];
+            for(int j=0; j<bT.size(); j++){ //j++){
                 array[j] = 0;
                 for(int k=0; k<a.get(0).length; k++){
                     array[j] += a.get(i)[k] * bT.get(j)[k];
