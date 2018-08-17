@@ -3,15 +3,13 @@ package matrmult;
 import java.util.*;
 
 public class MatrMultArrs {
-    static final int MIN_ELEMS = 160000;            // It appears threading to work better from this # of elements
-    static double[][] a;                            // 'A' matrix      
-    static double[][] b;                            // 'B' matrix\
-    static double[][] ab;                           // A·B matrix product
-    static int nProc;                               // Number of cores in system
+    static final int MIN_ELEMS = 160000;    // Threading appears to work better from this # of elements
+    static double[][] a;                    // 'A' matrix      
+    static double[][] b;                    // 'B' matrix\
+    static double[][] ab;                   // A·B matrix product
+    static int nProc;                       // Number of cores in system
 
     public static void main(String[] args) throws InterruptedException{
-        //System.out.println("Free memory: " + Runtime.getRuntime().freeMemory());
-        //System.out.println("Total memory: " + Runtime.getRuntime().maxMemory());
         // Get number of processing cores in system
         nProc = Runtime.getRuntime().availableProcessors();
         // Initialize matrices values
@@ -67,22 +65,22 @@ public class MatrMultArrs {
     private static class ChunkDotProd implements Runnable{
         double[][] a;                       // Matrix 'A'
         double[][] b;                       // Matrix 'B'
-        double[][] prodM;                   // Result (product) matrix
-        int i;                              // 'From' matrix result index... 
-        int l;                              // ...with this length (# of rows) 
-        ChunkDotProd(double[][] a, double[][] b, double[][] prodM, int idx, int length){
+        double[][] ab;                   // Result (product) matrix
+        int idx;                              // 'From' matrix result index... 
+        int length;                              // ...with this length (# of rows) 
+        ChunkDotProd(double[][] a, double[][] b, double[][] ab, int idx, int length){
             this.a = a;
             this.b = b;
-            this.prodM = prodM;
-            this.i = idx;
-            this.l = length;
+            this.ab = ab;
+            this.idx = idx;
+            this.length = length;
         }
         @Override
         public void run(){ 
             // Multiplying A submatrix by B
             double[][] chunkProduct = transpProduct(a, b); 
             // Building the final product matrix with each thread portion
-            System.arraycopy(chunkProduct, 0, prodM, i, l);
+            System.arraycopy(chunkProduct, 0, ab, idx, length);
         }
     }
     
@@ -124,7 +122,7 @@ public class MatrMultArrs {
         //a = new double[][]{{1, 2, 3}, {3, 2, 1}, {2, 1, 3}, {1, 3, 2}, {0, 1, 1}};
         //b = new double[][]{{0, 1, 2, 1}, {1, 0, 1, 2}, {2, 0, 1, 0}};  
         
-        // The explanatory text basic example
+        // The explanatory companion text basic example
         //a = new double[][]{{1, 0, 2}, {0, 1, 3}, {2, 1, 0}};
         //b = new double[][]{{2, 1}, {3, 0}, {1, 2}}; 
         

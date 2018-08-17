@@ -1,7 +1,5 @@
 package matrmult;
 
-//import java.lang.management.ManagementFactory;
-//import java.lang.management.OperatingSystemMXBean;
 import java.util.*;
 
 public class MatrProd {
@@ -23,22 +21,6 @@ public class MatrProd {
         //System.out.println("a·b excerpt = " + Arrays.toString(ab.getRow(0)));
         //System.out.println("a·b = " + ab.toString());
         System.out.println("Last elem = " + ab.getElem(ab.getNRows()-1, ab.getNCols()-1));
-        
-	/*OperatingSystemMXBean operatingSystemBean = ManagementFactory.getOperatingSystemMXBean();
-	long memory = 0L;
-	// if the system bean is an implementation by sun, we are almost done
-	try {
-		memory = ((com.sun.management.OperatingSystemMXBean) operatingSystemBean).getFreePhysicalMemorySize();
-	} catch (Throwable t) { // NOPMD
-		// fallback due to sun implementation not being available
-		// in this case we behave as before 6.0.004 where we did not take free memory into
-		// account
-		System.out.println("Get memory failed");
-	}
-
-	memory /= 1024; // kbyte
-	memory /= 1024; // mbyte
-	System.out.println("Physical memory = " + memory + " MBs");*/
     }
     
     public static Matrix threadedDotProduct(Matrix a, Matrix b) throws InterruptedException{

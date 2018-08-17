@@ -3,11 +3,13 @@ package matrmult;
 import java.util.*;
 
 public class MatrMultLists {
-    public static ArrayList<double[]> a;
-    public static ArrayList<double[]> b;
-    public static ArrayList<double[]> ab;
-    public static int nProc;
-    private static Thread[] threads;
+    // Matrices
+    public static ArrayList<double[]> a;        // Matrix A
+    public static ArrayList<double[]> b;        // Matrix B
+    public static ArrayList<double[]> ab;       // Product matrix A·B
+    // System
+    public static int nProc;                    // # of cores in system
+    private static Thread[] threads;            // Array of threads
     
     public static void main(String[] args) throws InterruptedException{
         // Get number of processing cores in system
@@ -16,7 +18,7 @@ public class MatrMultLists {
         threads = new Thread[nProc];
         // Initialize matrices
         initMtrs();
-        // Go dot product
+        // Go product
         long startT = System.currentTimeMillis();
         ab = threadedProduct(a, b); //mtrxTranspose(bT));
         System.out.println("Exec time: " + (System.currentTimeMillis() - startT)/1000. + " secs");
