@@ -85,27 +85,38 @@ public class MatrMultArrs {
     }
     
     public static double[][] mtrxProduct(double[][] a, double[][] b){
-        double[][] dp = new double[a.length][b[0].length];
-        for(int i=0; i<a.length; i++)
-            for(int j=0; j<b[0].length; j++)
-                for(int k=0; k<a[0].length; k++)
+        int aNRows = a.length;
+        int aNCols = a[0].length;
+        int bNCols = b[0].length;
+        
+        double[][] dp = new double[aNRows][bNCols];
+        for(int i=0; i<aNRows; i++)
+            for(int j=0; j<bNCols; j++)
+                for(int k=0; k<aNCols; k++)
                     dp[i][j] += a[i][k]*b[k][j];
         return dp;
     }
    
     public static double[][] transpProduct(double[][] a, double[][] bT){
-        double[][] dp = new double[a.length][bT.length];
-        for(int i=0; i<a.length; i++)
-            for(int j=0; j<bT.length; j++)             
-                for(int k=0; k<a[0].length; k++)
+        int aNRows = a.length;
+        int aNCols = a[0].length;
+        int bTNRows = bT.length;
+        
+        double[][] dp = new double[aNRows][bTNRows];
+        for(int i=0; i<aNRows; i++)
+            for(int j=0; j<bTNRows; j++)             
+                for(int k=0; k<aNCols; k++)
                     dp[i][j] += a[i][k]*bT[j][k];
         return dp;
     }
     
     private static double[][] mtrxTranspose(double[][] m){
-        double[][] mT = new double[m[0].length][m.length];
-        for(int i=0; i<m[0].length; i++)
-            for(int j=0; j<m.length; j++)
+        int mNRows = m.length;
+        int mNCols = m[0].length;
+        
+        double[][] mT = new double[mNCols][mNRows];
+        for(int i=0; i<mNCols; i++)
+            for(int j=0; j<mNRows; j++)
                 mT[i][j] = m[j][i]; 
         return mT;
     }

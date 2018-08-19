@@ -22,14 +22,14 @@ public class MatrMultLists {
         long startT = System.currentTimeMillis();
         ab = threadedProduct(a, b); //mtrxTranspose(bT));
         System.out.println("Exec time: " + (System.currentTimeMillis() - startT)/1000. + " secs");
-        // Show some checks
+        // Show me some checks
         //System.out.println("a·b excerpt= " + Arrays.toString(ab.get(0)));
         //System.out.println("a·b = " + Arrays.deepToString(ab.toArray()));
     }
     
     public static ArrayList<double[]> threadedProduct(ArrayList<double[]> a, ArrayList<double[]> b) throws InterruptedException{
         // Check correct dimensions
-        if(a.get(0).length != b.size()) throw new RuntimeException("No matching dimensiones in matrices");
+        if(a.get(0).length != b.size()) throw new RuntimeException("No matching dimensiones to multiply");
         // Compute transpose of bT
         ArrayList<double[]> bT = mtrxTranspose(b);      // 0.11 secs
         // Get number of rows in each chunk (piece of work) of matrix A
@@ -81,20 +81,16 @@ public class MatrMultLists {
     }
     
     private static ArrayList<double[]> transposeProduct(ArrayList<double[]> a, ArrayList<double[]> bT){          
-        /*ArrayList<double[]> dp = new ArrayList<>(a.size());
-        for(int i=0; i<a.size(); i++)
-            dp.add(new double[bT.size()]); 
-        for(int i=0; i<a.size(); i++)
-            for(int j=0; j<bT.size(); j++)
-                for(int k=0; k<a.get(0).length; k++)
-                    dp.get(i)[j] += a.get(i)[k] * bT.get(j)[k];*/
+        int aNRows = a.size();
+        int aNCols = a.get(0).length;
+        int bTNRows = bT.size();
         
-        ArrayList<double[]> dp = new ArrayList<>(a.size());
-        for(int i=0; i<a.size(); i++){
-            double[] array = new double[bT.size()];
-            for(int j=0; j<bT.size(); j++){ //j++){
+        ArrayList<double[]> dp = new ArrayList<>(aNRows);
+        for(int i=0; i<aNRows; i++){
+            double[] array = new double[bTNRows];
+            for(int j=0; j<bTNRows; j++){ 
                 array[j] = 0;
-                for(int k=0; k<a.get(0).length; k++){
+                for(int k=0; k<aNCols; k++){
                     array[j] += a.get(i)[k] * bT.get(j)[k];
                 }
             }
@@ -105,31 +101,20 @@ public class MatrMultLists {
     
     private static ArrayList<double[]> mtrxTranspose(ArrayList<double[]> m){
         //long startT = System.currentTimeMillis();
+        int mNRows = m.size();
         int mNCols = m.get(0).length;
+        
         ArrayList<double[]> mT = new ArrayList<>(mNCols); 
         for(int i=0; i<mNCols; i++)
-            mT.add(new double[m.size()]);
+            mT.add(new double[mNRows]);
         double[] arrayM;
-        
-        for(int i=0; i<m.size(); i++){
+        for(int i=0; i<mNRows; i++){
             arrayM = m.get(i);
             for(int j=0; j<mNCols; j++){
                 mT.get(j)[i] = arrayM[j];
             }
         }
-        //System.out.println("Transp time2: " + (System.currentTimeMillis() - startT)/1000. + " secs");
-        
-        /*long startT = System.currentTimeMillis();
-        ArrayList<double[]> mT = new ArrayList<>(m.get(0).length); 
-        //mT = new ArrayList<>(m.get(0).length);
-        double[] array = new double[m.size()];
-        for(int i=0; i<m.get(0).length; i++){
-            for(int j=0; j<m.size(); j++){
-                    array[j] = m.get(j)[i];
-            }
-            mT.add(Arrays.copyOf(array, array.length));
-        }
-        System.out.println("Transp time3: " + (System.currentTimeMillis() - startT)/1000. + " secs"); */
+        //System.out.println("Transp time: " + (System.currentTimeMillis() - startT)/1000. + " secs"); 
         return mT;
     }
     
